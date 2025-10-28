@@ -1,0 +1,27 @@
+market: crypto   # crypto | stock
+symbols: ["BTC/USDT"]
+interval: "1h"       # crypto: 1m/5m/1h/1d; stock: 1d
+start: "2024-01-01"
+end: "2025-01-01"
+
+commission_bps: 5
+slippage_bps: 2
+max_gross_leverage: 1.0
+
+risk:
+  stop_loss_pct: 0.03
+  take_profit_pct: 0.06
+
+position:
+  mode: "vol_target"
+  vol_lookback: 30
+  vol_target_annual: 0.15
+
+strategy:
+  name: "sma_cross"
+  fast: 20
+  slow: 60
+
+backtest:
+  initial_cash: 100000
+  benchmark: "BTC/USDT"

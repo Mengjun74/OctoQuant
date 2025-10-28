@@ -1,0 +1,6 @@
+yfinance
+ccxt
+pandas
+numpy
+pyyaml
+loguru
