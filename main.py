@@ -5,6 +5,7 @@ from octoquant.strat.sma_cross import SmaCross
 from octoquant.risk.position_sizer import VolTargetSizer
 from octoquant.risk.risk_manager import BasicRisk
 from octoquant.backtest.engine import BacktestEngine
+from octoquant.backtest.metrics import compute_metrics, pretty_print
 
 def load_cfg(path):
     with open(path, "r") as f:
@@ -35,6 +36,12 @@ def main():
 
     eng = BacktestEngine(feed, strat, ps, risk, cfg["commission_bps"], cfg["slippage_bps"], cfg["backtest"]["initial_cash"])
     equity, trades = eng.run()
+    m = compute_metrics(
+        equity,
+        periods_per_year=cfg["metrics"]["periods_per_year"],
+        rf=cfg["metrics"].get("rf", 0.0),
+    )
+    pretty_print(m)
     print(equity.tail())
     return 0
 

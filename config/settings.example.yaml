@@ -1,15 +1,16 @@
-market: crypto   # crypto | stock
-symbols: ["BTC/USDT"]
-interval: "1h"       # crypto: 1m/5m/1h/1d; stock: 1d
+# ========= 默认：加密（Crypto, 1h bar, 24/7） =========
+market: crypto                 # crypto | stock
+symbols: ["BTC/USDT"]          # 也可 ["ETH/USDT"] 等
+interval: "1h"                 # 常见：1m/5m/15m/1h/4h/1d
 start: "2024-01-01"
-end: "2025-01-01"
+end:   "2025-01-01"
 
-commission_bps: 5
-slippage_bps: 2
+commission_bps: 5              # 手续费（基点）
+slippage_bps: 2                # 滑点（基点）
 max_gross_leverage: 1.0
 
 risk:
-  stop_loss_pct: 0.03
+  stop_loss_pct: 0.03          # 预留参数（当前 BasicRisk 未使用）
   take_profit_pct: 0.06
 
 position:
@@ -25,3 +26,40 @@ strategy:
 backtest:
   initial_cash: 100000
   benchmark: "BTC/USDT"
+
+metrics:
+  periods_per_year: 8760       # 1h * 24 * 365 = 8760（加密 24/7）
+  rf: 0.0                      # 年化无风险利率（根据需要调整）
+
+# =========（可选）股票（日线）示例 =========
+# market: stock
+# symbols: ["AAPL"]
+# interval: "1d"
+# start: "2020-01-01"
+# end:   "2025-01-01"
+#
+# commission_bps: 1
+# slippage_bps: 1
+# max_gross_leverage: 1.0
+#
+# risk:
+#   stop_loss_pct: 0.03
+#   take_profit_pct: 0.06
+#
+# position:
+#   mode: "vol_target"
+#   vol_lookback: 20
+#   vol_target_annual: 0.15
+#
+# strategy:
+#   name: "sma_cross"
+#   fast: 20
+#   slow: 60
+#
+# backtest:
+#   initial_cash: 100000
+#   benchmark: "SPY"
+#
+# metrics:
+#   periods_per_year: 252     # 美股交易日年化
+#   rf: 0.02                  # 假设2%年化无风险（示例）
