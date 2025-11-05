@@ -1,35 +1,42 @@
 # ========= 默认：加密（Crypto, 1h bar, 24/7） =========
 market: crypto                 # crypto | stock
 symbols: ["BTC/USDT"]          # 也可 ["ETH/USDT"] 等
-interval: "1h"                 # 常见：1m/5m/15m/1h/4h/1d
-start: "2024-01-01"
-end:   "2025-01-01"
+interval: "1d"                 # 常见：1m/5m/15m/1h/4h/1d
+start: "2023-01-01"
+end:   "2025-11-01"
 
-commission_bps: 5              # 手续费（基点）
-slippage_bps: 2                # 滑点（基点）
+commission_bps: 8              # 手续费（基点）
+slippage_bps: 3                # 滑点（基点）
 max_gross_leverage: 1.0
 
 risk:
-  stop_loss_pct: 0.03          # 预留参数（当前 BasicRisk 未使用）
-  take_profit_pct: 0.06
+  stop_loss_pct: 0.00          
+  take_profit_pct: 0.00
 
 position:
   mode: "vol_target"
-  vol_lookback: 30
-  vol_target_annual: 0.15
+  vol_lookback: 30          #  用 30 天波动窗口
+  vol_target_annual: 0.18   #  稍微降低波动目标（原来 0.15–0.18 都可以）
 
 strategy:
   name: "sma_cross"
   fast: 20
-  slow: 60
+  slow: 100          # 日线周期下，把慢均线拉长，减少假信号
 
 backtest:
-  initial_cash: 100000
+  initial_cash: 1000   # 小资金
   benchmark: "BTC/USDT"
 
 metrics:
-  periods_per_year: 8760       # 1h * 24 * 365 = 8760（加密 24/7）
-  rf: 0.0                      # 年化无风险利率（根据需要调整）
+  periods_per_year: 365   # 日线一年365天（加密全天候市场）
+  rf: 0.0
+
+execution:
+  exec_mode: "close_to_next_open"   # 收盘信号次日开盘执行（防前视）
+  max_turnover_per_bar: 0.30        # 单日最大调仓幅度 30%
+  min_notional: 10.0                # 最小交易金额（10 USDT）
+  lot_rounding: "floor"             # 向下取整，避免超出交易所限制
+
 
 # =========（可选）股票（日线）示例 =========
 # market: stock
