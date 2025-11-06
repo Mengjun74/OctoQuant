@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "octoquant"
+version = "0.0.1"
+description = "Quant backtesting playground"
+authors = [{ name = "Mengjun Chen" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.setuptools.packages.find]
+include = ["octoquant*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
