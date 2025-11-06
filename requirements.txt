@@ -4,3 +4,4 @@ pandas
 numpy
 pyyaml
 loguru
+pytest
