@@ -1,0 +1,76 @@
+{
+  "lightgbm": {
+    "model_path": "models/lightgbm_baseline.txt",
+    "mse": 0.0004821637389901609,
+    "mae": 0.015617678569691509,
+    "information_coefficient": 0.01589077044280293,
+    "features": [
+      "ret_1",
+      "ma_ratio_5",
+      "vol_5",
+      "ret_5",
+      "ma_ratio_10",
+      "vol_10",
+      "ret_10",
+      "ma_ratio_20",
+      "vol_20",
+      "ret_20",
+      "volume_ret_1",
+      "volume_z_5",
+      "volume_z_10",
+      "volume_z_20",
+      "rsi_14"
+    ],
+    "feature_importance": [
+      [
+        "ret_10",
+        0.009874239680357277
+      ],
+      [
+        "ret_20",
+        0.009794710204005241
+      ],
+      [
+        "ret_5",
+        0.007970280013978481
+      ],
+      [
+        "ret_1",
+        0.007270850008353591
+      ],
+      [
+        "rsi_14",
+        0.007261869963258505
+      ],
+      [
+        "volume_z_10",
+        0.006490639876574278
+      ],
+      [
+        "ma_ratio_10",
+        0.0060562798753380775
+      ],
+      [
+        "vol_10",
+        0.0045969150378368795
+      ],
+      [
+        "volume_z_5",
+        0.0036678200121968985
+      ],
+      [
+        "ma_ratio_5",
+        0.0025236899964511395
+      ]
+    ],
+    "split_index": 685
+  },
+  "autoreg": {
+    "lags": 5,
+    "split_index": 685,
+    "model_path": "models/autoreg_baseline.pkl",
+    "mse": 0.0004824031097716335,
+    "mae": 0.015587594348514006,
+    "information_coefficient": 0.020354368822919473
+  }
+}

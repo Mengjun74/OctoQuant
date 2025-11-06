@@ -5,3 +5,6 @@ numpy
 pyyaml
 loguru
 pytest
+lightgbm
+statsmodels
+joblib

@@ -66,6 +66,8 @@ The `strategy` block now supports:
 
 * `rsi_pullback` – default in the sample config, built for small accounts (RSI(2) pullback with trend filter).
 * `sma_cross` – the original dual moving average crossover (uncomment the provided settings).
+* `ml_lightgbm` – loads a LightGBM regression model trained via `scripts/train_baselines.py`.
+* `ml_autoreg` – uses an AutoReg (AR) time-series model (also produced by the baseline trainer).
 
 # 4. Run backtest
 ```bash
@@ -88,6 +90,35 @@ Date        Equity
 * **Signal Modeling:** train ML models (XGBoost, LSTM, TSTransformer) for alpha prediction.
 * **LLM Integration:** summarize research notebooks, auto-generate experiment logs.
 * **Reinforcement Learning:** optimize policy-based trading decisions.
+
+## 📈 Train Baseline Models
+
+```bash
+python scripts/train_baselines.py --cfg config/settings.yaml --output-dir models
+```
+
+This command will:
+
+- build technical features from your configured data feed,
+- train a LightGBM regression baseline and a simple AutoReg time-series model,
+- store artifacts under `models/` (`lightgbm_baseline.txt`, `autoreg_baseline.pkl`, `baseline_summary.json`, etc.).
+
+After training, point your `strategy` block to the generated files, for example:
+
+```yaml
+strategy:
+  name: "ml_lightgbm"
+  model_path: "models/lightgbm_baseline.txt"
+  feature_path: "models/lightgbm_features.pkl"
+  threshold: 0.0
+  short: false
+```
+
+## 🛠️ Roadmap (Work-in-Progress)
+
+- Build a baseline predictive model on existing historical data to benchmark strategy performance.
+- Design a trading environment and reward function so we can plug in RL libraries (e.g., SB3, RLlib).
+- Real-time execution and rich visualization dashboards are on hold until the first two pieces are stable.
 
 ---
 

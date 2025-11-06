@@ -7,6 +7,7 @@ from octoquant.data.feed_yf import YFDataFeed
 from octoquant.data.feed_ccxt import CCXTDataFeed
 from octoquant.strat.sma_cross import SmaCross
 from octoquant.strat.rsi_pullback import RsiPullback
+from octoquant.strat.ml_models import LightGBMStrategy, AutoRegStrategy
 from octoquant.risk.position_sizer import VolTargetSizer
 from octoquant.risk.risk_manager import BasicRisk
 from octoquant.backtest.engine import BacktestEngine
@@ -43,6 +44,21 @@ def build_strategy(cfg):
             exit_level=strat_cfg.get("exit_level", 50.0),
             trend_period=strat_cfg.get("trend_period", 50),
             slope_threshold=strat_cfg.get("slope_threshold", 0.0),
+        )
+
+    if name == "ml_lightgbm":
+        return LightGBMStrategy(
+            strat_cfg["model_path"],
+            strat_cfg["feature_path"],
+            threshold=strat_cfg.get("threshold", 0.0),
+            short=strat_cfg.get("short", False),
+        )
+
+    if name == "ml_autoreg":
+        return AutoRegStrategy(
+            strat_cfg["model_path"],
+            threshold=strat_cfg.get("threshold", 0.0),
+            short=strat_cfg.get("short", False),
         )
 
     raise ValueError(f"Unsupported strategy: {name}")
