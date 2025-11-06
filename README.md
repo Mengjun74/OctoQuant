@@ -60,9 +60,16 @@ octoquant/
 
 # 3. Configure your strategy
  cp config/settings.example.yaml config/settings.yaml
+```
+
+The `strategy` block now supports:
+
+* `rsi_pullback` – default in the sample config, built for small accounts (RSI(2) pullback with trend filter).
+* `sma_cross` – the original dual moving average crossover (uncomment the provided settings).
 
 # 4. Run backtest
- python main.py backtest --cfg config/settings.yaml
+```bash
+python main.py backtest --cfg config/settings.yaml
 ```
 
 Example output:

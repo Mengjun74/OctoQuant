@@ -19,9 +19,16 @@ position:
   vol_target_annual: 0.18   #  稍微降低波动目标（原来 0.15–0.18 都可以）
 
 strategy:
-  name: "sma_cross"
-  fast: 20
-  slow: 100          # 日线周期下，把慢均线拉长，减少假信号
+  name: "rsi_pullback"
+  rsi_period: 2
+  oversold_level: 10
+  exit_level: 50
+  trend_period: 50
+  slope_threshold: 0.0   # 允许轻微回调，只要均线仍向上
+  # 如需回到双均线策略，改为：
+  # name: "sma_cross"
+  # fast: 20
+  # slow: 100
 
 backtest:
   initial_cash: 1000   # 小资金

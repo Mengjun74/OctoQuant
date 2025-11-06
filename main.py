@@ -6,6 +6,7 @@ import yaml
 from octoquant.data.feed_yf import YFDataFeed
 from octoquant.data.feed_ccxt import CCXTDataFeed
 from octoquant.strat.sma_cross import SmaCross
+from octoquant.strat.rsi_pullback import RsiPullback
 from octoquant.risk.position_sizer import VolTargetSizer
 from octoquant.risk.risk_manager import BasicRisk
 from octoquant.backtest.engine import BacktestEngine
@@ -28,6 +29,25 @@ def build_feed(cfg):
         return CCXTDataFeed(exchange, symbol, timeframe=interval)
 
 
+def build_strategy(cfg):
+    strat_cfg = cfg.get("strategy", {})
+    name = strat_cfg.get("name", "sma_cross").lower()
+
+    if name == "sma_cross":
+        return SmaCross(strat_cfg.get("fast", 20), strat_cfg.get("slow", 60))
+
+    if name == "rsi_pullback":
+        return RsiPullback(
+            rsi_period=strat_cfg.get("rsi_period", 2),
+            oversold_level=strat_cfg.get("oversold_level", 10.0),
+            exit_level=strat_cfg.get("exit_level", 50.0),
+            trend_period=strat_cfg.get("trend_period", 50),
+            slope_threshold=strat_cfg.get("slope_threshold", 0.0),
+        )
+
+    raise ValueError(f"Unsupported strategy: {name}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("mode", choices=["backtest", "paper"], help="paper reserved for future use")
@@ -38,7 +58,7 @@ def main():
     feed = build_feed(cfg)
 
     # 策略 / 仓位 / 风控
-    strat = SmaCross(cfg["strategy"]["fast"], cfg["strategy"]["slow"])
+    strat = build_strategy(cfg)
     ps = VolTargetSizer(cfg["position"]["vol_lookback"], cfg["position"]["vol_target_annual"])
     risk = BasicRisk(cfg["max_gross_leverage"])
 
