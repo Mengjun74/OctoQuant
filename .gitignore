@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 octoquant.egg-info/
+output_data/
+config/coinbase_dp_api_key.json

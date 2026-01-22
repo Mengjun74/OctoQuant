@@ -1,89 +1,44 @@
-# ========= 默认：加密（Crypto, 1h bar, 24/7） =========
-market: crypto                 # crypto | stock
-symbols: ["BTC/USDT"]          # 也可 ["ETH/USDT"] 等
-interval: "1d"                 # 常见：1m/5m/15m/1h/4h/1d
-start: "2023-01-01"
-end:   "2025-11-01"
+# ========= Crypto Settings =========
+market: crypto
+symbols: ["BTC/USDT"]         # Default symbol, can be changed
+interval: "30m"               # 30 minute timeframe
+start: "2025-07-20"           # Last 6 months from Jan 2026
+end:   "2026-01-21"           # Current date
 
-commission_bps: 8              # 手续费（基点）
-slippage_bps: 3                # 滑点（基点）
+commission_bps: 8             # Coinbase Advanced Taker (approx)
+slippage_bps: 3
 max_gross_leverage: 1.0
 
 risk:
-  stop_loss_pct: 0.00          
-  take_profit_pct: 0.00
+  stop_loss_pct: 0.03         # Fixed 3%
+  take_profit_pct: 0.03       # Fixed 3%
 
 position:
-  mode: "vol_target"
-  vol_lookback: 30          #  用 30 天波动窗口
-  vol_target_annual: 0.18   #  稍微降低波动目标（原来 0.15–0.18 都可以）
+  mode: "fixed"               # Or "vol_target". Strategy says "No dynamic position sizing"
+  size_pct: 0.95              # Use 95% of cash per trade (single position)
 
 strategy:
-  name: "rsi_pullback"
-  rsi_period: 2
-  oversold_level: 10
-  exit_level: 50
-  trend_period: 50
-  slope_threshold: 0.0   # 允许轻微回调，只要均线仍向上
-  # 如需回到双均线策略，改为：
-  # name: "sma_cross"
-  # fast: 20
-  # slow: 100
-  # 或使用训练好的机器学习模型：
-  # name: "ml_lightgbm"
-  # model_path: "models/lightgbm_baseline.txt"
-  # feature_path: "models/lightgbm_features.pkl"
-  # threshold: 0.0
-  # short: false
-  # name: "ml_autoreg"
-  # model_path: "models/autoreg_baseline.pkl"
-  # threshold: 0.0
-  # short: false
+  name: "lwpi_tdfi"
+  lwpi_period: 135
+  lwpi_smooth: 8
+  tdfi_lookback: 21
+  tdfi_mma: 5
+  tdfi_smma: 15
+  tdfi_n: 5
 
 backtest:
-  initial_cash: 1000   # 小资金
+  initial_cash: 1000
   benchmark: "BTC/USDT"
 
 metrics:
-  periods_per_year: 365   # 日线一年365天（加密全天候市场）
+  periods_per_year: 17520     # 30m candles: 24 * 2 * 365 = 17520
   rf: 0.0
 
 execution:
-  exec_mode: "close_to_next_open"   # 收盘信号次日开盘执行（防前视）
-  max_turnover_per_bar: 0.30        # 单日最大调仓幅度 30%
-  min_notional: 10.0                # 最小交易金额（10 USDT）
-  lot_rounding: "floor"             # 向下取整，避免超出交易所限制
-
-
-# =========（可选）股票（日线）示例 =========
-# market: stock
-# symbols: ["AAPL"]
-# interval: "1d"
-# start: "2020-01-01"
-# end:   "2025-01-01"
-#
-# commission_bps: 1
-# slippage_bps: 1
-# max_gross_leverage: 1.0
-#
-# risk:
-#   stop_loss_pct: 0.03
-#   take_profit_pct: 0.06
-#
-# position:
-#   mode: "vol_target"
-#   vol_lookback: 20
-#   vol_target_annual: 0.15
-#
-# strategy:
-#   name: "sma_cross"
-#   fast: 20
-#   slow: 60
-#
-# backtest:
-#   initial_cash: 100000
-#   benchmark: "SPY"
-#
-# metrics:
-#   periods_per_year: 252     # 美股交易日年化
-#   rf: 0.02                  # 假设2%年化无风险（示例）
+  exec_mode: "close_to_next_open" 
+  # Note: "On candle close only" implies signal is close, trade is open of next?
+  # Or trade at close? Backtest engines usually trade next open.
+  # User said "Signal evaluation: On candle close only".
+  
+  max_turnover_per_bar: 1.0
+  min_notional: 10.0
